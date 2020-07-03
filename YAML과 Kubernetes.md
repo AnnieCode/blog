@@ -36,4 +36,4 @@ YAML은 그동안 아래와 같은 용도로 주로 사용이 되어 왔습니�
 
 #### 3. YAML, JSON, XML 비교
 
-![logo]: http://developer.ibm.com/developer/tutorials/yaml-basics-and-usage-in-kubernetes/images/table1.png "비교표"
+![비교표](http://developer.ibm.com/developer/tutorials/yaml-basics-and-usage-in-kubernetes/images/table1.png "비교표")
