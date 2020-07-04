@@ -1,6 +1,7 @@
 # main links
 main:
-  - title: "클라우드"
+  - title: "카테고리"
+    url: https://anniecode.github.io/blog/categories/
     children:
       - title: "Kubernetes"
         url: https://anniecode.github.io/blog/categories/kubernetes
