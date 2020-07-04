@@ -96,7 +96,7 @@ analytics:
 # Site Author
 author:
   name             : "Annie"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : /assets/images/프로필_캐릭터.jpeg # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "20년 넘게 시스템 엔지니어와 솔루션 기술 지원을 하며 다양한 기술들을 접해왔습니다. 요즘은 클라우드 기술을 지원하며 공부하고 있습니다."
   location         : "South Korea"
   email            :
