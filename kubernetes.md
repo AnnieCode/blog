@@ -5,4 +5,4 @@ permalink: /categories/kubernetes/
 taxonomy: Kubernetes
 ---
 
-Sample post listing for the category `Kubernetes`.
+'Kubernetes' 카테고리 글모음
