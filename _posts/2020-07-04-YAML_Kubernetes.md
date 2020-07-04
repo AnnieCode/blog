@@ -1,6 +1,6 @@
 ---
 title: "YAML 과 Kubernetes"
-date: 2020-07-03 10:00:00
+date: 2020-07-03 10:00:00 +0900
 categories: YAML Kubernetes 쿠버네티스
 ---
 
