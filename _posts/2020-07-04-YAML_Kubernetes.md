@@ -1,3 +1,9 @@
+---
+title: "YAML 과 Kubernetes"
+date: 2020-07-03 10:00:00
+categories: YAML Kubernetes 쿠버네티스
+---
+
 # **YAML 과 Kubernetes**
 
 
