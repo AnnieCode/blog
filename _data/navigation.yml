@@ -1,10 +1,9 @@
 # main links
 main:
-  - title: "메뉴 가이드"
-    url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
+  - title: "클라우드"
     children:
-      - title: "서브메뉴1"
-        url: https://anniecode.github.io/blog/
+      - title: "Kubernetes"
+        url: https://anniecode.github.io/blog/categories/kubernetes
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
   # - title: "Sample Posts"
