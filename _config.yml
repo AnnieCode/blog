@@ -12,7 +12,7 @@
 
 # theme                  : "minimal-mistakes-jekyll"
 # remote_theme           : "mmistakes/minimal-mistakes"
-minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
+minimal_mistakes_skin    : "mint" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 remote_theme : mmistakes/minimal-mistakes
 
@@ -22,7 +22,7 @@ title                    : "미크"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "Annie"
-description              : "An amazing website."
+description              : "새로운 IT 기술과 생각들을 정리할 목적으로 만든 블로그입니다."
 url                      : "https://anniecode.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "/blog" # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
