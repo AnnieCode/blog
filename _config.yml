@@ -281,3 +281,10 @@ defaults:
       comments: # true
       share: true
       related: true
+  # _main
+  - scope:
+      path: ""
+      type: main
+    values:
+      sidebar:
+        nav: "main"
