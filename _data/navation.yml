@@ -2,6 +2,9 @@
 main:
   - title: "메뉴 가이드"
     url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
+    children:
+      - title: "서브메뉴1"
+        url: https://anniecode.github.io/blog/
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
   # - title: "Sample Posts"
