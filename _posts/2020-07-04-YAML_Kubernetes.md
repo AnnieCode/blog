@@ -4,7 +4,7 @@ date: 2020-07-03 10:00:00 +0900
 categories: Kubernetes
 tags: YAML
 sidebar:
-  nav: "docs"
+  nav: "main"
 ---
 YAML 파일의 기본적인 내용과 쿠버네티스에서의 역할을 살펴봅니다.
 
