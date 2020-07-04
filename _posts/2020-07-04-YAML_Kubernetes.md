@@ -4,8 +4,6 @@ date: 2020-07-03 10:00:00 +0900
 categories: Kubernetes
 ---
 
-# **YAML 과 Kubernetes**
-
 
 #### 목차
 
