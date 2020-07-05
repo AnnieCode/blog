@@ -72,7 +72,6 @@ OpenShift Container Platform 클러스터를 설치/구축하기 전에 먼저 �
 |Master|RHCOS|2|16 GB|120 GB|3|
 |Worker|RHCOS|2|8 GB|120 GB|2|
 
-<p>
 
 **주의사항** : IBM Power 서버는 PowerVM 환경에서 기본 SMT8 모드를 지원하므로, 설정된 가상 코어수 (Virtual Processor)에 8배수를 한 개수가 vCPU로 인식됩니다. 예를 들어, VP 를 1로 설정했다면, RHCOS에서는 8개의 Logical CPU 가 보입니다. 마스터 노드의 경우, vCPU 개수가 많으면 커널 메모리를 많이 필요로 하므로 초기 구성시 마스터 노드의 VP개수를 1이나 2로 설정하는 것을 권장합니다.
 
