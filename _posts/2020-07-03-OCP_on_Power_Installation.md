@@ -89,15 +89,7 @@ OpenShift Container Platform 클러스터를 설치/구축하기 전에 먼저 �
   ![RedHat_Login](https://anniecode.github.io/blog/assets/images/redhat_login1.png)
   ![Power](https://anniecode.github.io/blog/assets/images/power1.png)
   ![Copy Pull Secret](https://anniecode.github.io/blog/assets/images/PullSecret.png)
-- Red Hat 사이트에서 설치에 필요한 파일을 인프라 노드에서 다운로드
-  - RHCOS 이미지 파일
-  ```
-  $ wget https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/4.4/4.4.9/rhcos-4.4.9-ppc64le-metal.ppc64le.raw.gz
-  ```
-  - OpenShift Installer 바이너리 
-  ```
-  $ wget https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/4.3.18/openshift-install-linux-4.3.18.tar.gz -C /usr/local/bin
-  ```
+- Red Hat 사이트에서 설치에 필요한 파일 다운로드
   - 각 VM 부팅에 사용할 RHCOS installer iso 파일 다운로드 (이후에 OCP 클러스터의 각 노드의 Virtual Optical로 구성할 VIOS 서버에 저장/구성할 것입니다)
   ```
   $ wget https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/4.4/4.4.9/rhcos-4.4.9-ppc64le-installer.ppc64le.iso
@@ -317,4 +309,147 @@ $ echo "hello httpd" > README.md
 $ curl http://10.10.14.90/README.md
 ```
 
+**NFS 서버**
+
+```
+# 설치
+$ yum install -y nfs-utils
+
+# Volume 디렉토리 생성
+$ df -h
+Filesystem                 Size  Used Avail Use% Mounted on
+devtmpfs                   4.0G     0  4.0G   0% /dev
+tmpfs                      4.0G  128K  4.0G   1% /dev/shm
+tmpfs                      4.0G   46M  4.0G   2% /run
+tmpfs                      4.0G     0  4.0G   0% /sys/fs/cgroup
+/dev/mapper/rootvg-lvroot   47G  9.2G   38G  20% /
+/dev/dm-4                  500G  3.6G  497G   1% /data
+/dev/dm-3                 1014M  189M  826M  19% /boot
+tmpfs                      812M     0  812M   0% /run/user/0
+$ mkdir -p /data/user
+$ mkdir -p /data/images
+$ chmod -R 777 /data
+
+# /etc/exports파일에 volume 디렉토리 추가
+$ vi /cat/exports
+
+/data/images *(rw,root_squash,all_squash,no_wdelay)
+/data/user *(rw,root_squash,all_squash,no_wdelay)
+
+# NFS 서버 시작
+$ systemctl enable nfs-server
+$ systemctl start nfs-server
+$ systemctl status nfs-server
+```
+
+**Infra#1(Bastion) 노드에서 SSH Key 생성**
+```
+$ ssh-keygen -b 4096 -t rsa
+```
+현재 사용자의 HOME디렉토리 하위에 '.ssh'라는 디렉토리가 생깁니다.
+그 디렉토리에 private key파일인 id_rsa와 public key파일인 id_rsa.pub가 생성됩니다.
+
+
+**OpenShift Installer 다운로드 및 설치**
+```
+https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/4.4.9/openshift-install-linux-4.4.9.tar.gz
+$ wget https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/4.4.9/openshift-install-linux-4.4.9.tar.gz 
+$ tar -xvf openshift-install-linux-4.4.9.tar.gz
+$ openshift-install version
+openshift-install 4.4.9
+built from commit 1541bf917973186bbab6a5f895f08db4334a5d9a
+release image quay.io/openshift-release-dev/ocp-release@sha256:ae48474c6fcd0666a672ce2a449736a2549693c04186ea588e37477635c976a6
+```
+
+**CLI 툴킷 다운로드 및 설치**
+```
+$ wget https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/4.4.9/openshift-client-linux-4.4.9.tar.gz
+$ tar -xvf openshift-client-linux-4.4.9.tar.gz
+$ cp ./kubectl /usr/local/bin/kubectl
+$ cp ./oc /usr/local/bin/oc
+
+$ oc version
+Client Version: 4.4.9
+
+$ kubectl version
+Client Version: version.Info{Major:"1", Minor:"17", GitVersion:"v1.17.0-4-g38212b5", GitCommit:"d038424d6d4f1cc39ad586ac0d36dac3a7a37ceb", GitTreeState:"clean", BuildDate:"2020-06-16T03:31:01Z", GoVersion:"go1.13.4", Compiler:"gc", Platform:"linux/ppc64le"}
+```
+
+**인스톨 작업을 진행할 디렉토리와 install-config.yaml 생성**
+
+```
+$ mkdir install
+$ cd install
+$ vi install-config.yaml
+apiVersion: v1
+baseDomain: example.com
+compute:
+- hyperthreading: Enabled
+  name: worker
+  replicas: 2
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  replicas: 3
+metadata:
+  name: haru
+networking:
+  clusterNetwork:
+  - cidr: 10.136.0.0/14
+    hostPrefix: 23
+  networkType: OpenShiftSDN
+  serviceNetwork:
+  - 172.36.0.0/16
+platform:
+  none: {}
+fips: false
+pullSecret: '{"auths": ...}'
+sshKey: 'ssh-rsa ... '
+```
+`baseDomain: ` 클러스터 도메인 이름으로 변경
+`pullSecret: ` 다음 부분에 이전에 Red Hat 사이트에서 복사했던 Pull Secret 을 붙여넣기 
+`sshKey: ` 다음 부분에 이전에 생성했던 public SSH key 를 복사해서 붙여넣기
+
+OpenShift Installer로 Kubernetes Manifest과 Ignition 파일을 생성하면, install-config.yaml 파일이 삭제되므로, 이후 보관을 위해 백업을 받아 놓습니다. 
+```
+$ cp install-config.yaml install-config.yaml.bak
+```
+
+**Manifest 과 Ignitaion 파일 생성**
+$ ./openshift-install create manifests --dir=install/
+INFO Consuming Install Config from target directory
+WARNING Making control-plane schedulable by setting MastersSchedulable to true for Scheduler cluster settings
+
+$ ls install/
+manifests  openshift
+
+# masterSchedulable 을 False로 수정
+$ vi manifests/cluster-scheduler-02-config.yml
+```
+
+**Ignition 파일 작업**
+``
+$ ./openshift-install create ignition-configs --dir=install/
+INFO Consuming OpenShift Install (Manifests) from target directory
+INFO Consuming Worker Machines from target directory
+INFO Consuming Master Machines from target directory
+INFO Consuming Openshift Manifests from target directory
+INFO Consuming Common Manifests from target directory
+
+$ ls install/
+auth  bootstrap.ign  install-config.yaml.bak  master.ign  metadata.json  worker.ign
+
+# Ignition 파일을 웹서버 디렉토리로 복사하고 권한 변경
+$ cp dir/*.ign /var/www/html
+$ chmod 644 /var/www/html/*.ign
+```
+
+**RHCOS raw 이미지 파일 작업**
+```
+$ cd /var/www/html/
+$ wget https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/4.4/4.4.9/rhcos-4.4.9-ppc64le-metal.ppc64le.raw.gz
+```
+
+[참조] Red Hat OpenShift Documentation 
+https://docs.openshift.com/container-platform/4.4/installing/installing_ibm_power/installing-ibm-power.html
 
