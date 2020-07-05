@@ -416,6 +416,7 @@ $ cp install-config.yaml install-config.yaml.bak
 ```
 
 **Manifest 과 Ignitaion 파일 생성**
+```
 $ ./openshift-install create manifests --dir=install/
 INFO Consuming Install Config from target directory
 WARNING Making control-plane schedulable by setting MastersSchedulable to true for Scheduler cluster settings
@@ -428,7 +429,7 @@ $ vi manifests/cluster-scheduler-02-config.yml
 ```
 
 **Ignition 파일 작업**
-``
+```
 $ ./openshift-install create ignition-configs --dir=install/
 INFO Consuming OpenShift Install (Manifests) from target directory
 INFO Consuming Worker Machines from target directory
@@ -451,5 +452,6 @@ $ wget https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/
 ```
 
 [참조] Red Hat OpenShift Documentation 
+
 https://docs.openshift.com/container-platform/4.4/installing/installing_ibm_power/installing-ibm-power.html
 
