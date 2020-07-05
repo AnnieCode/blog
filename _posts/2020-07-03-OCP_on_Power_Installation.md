@@ -84,17 +84,17 @@ OpenShift Container Platform 클러스터를 설치/구축하기 전에 먼저 �
 
 - 클러스터 이름 : `____________________________` (예:mycluster)
 - 도메인 네임 : `____________________________` (예:example.com)
-- OpenShift Pull Secrect을 복사해서 별도의 파일에 저장해 둡니다. <p>
-  https://cloud.redhat.com/openshift/install/power/user-provisioned <p>
-  ![RedHat_Login](https://anniecode.github.io/blog/assets/images/redhat_login1.png) <p>
-  ![Power](https://anniecode.github.io/blog/assets/images/power1.png) <p>
-  ![Copy Pull Secret](https://anniecode.github.io/blog/assets/images/PullSecret.png) <p>
-- Red Hat 사이트에서 설치에 필요한 파일을 인프라 노드에서 다운로드 <p>
-  - RHCOS 이미지 파일 <br>
+- OpenShift Pull Secrect을 복사해서 별도의 파일에 저장해 둡니다.
+  https://cloud.redhat.com/openshift/install/power/user-provisioned
+  ![RedHat_Login](https://anniecode.github.io/blog/assets/images/redhat_login1.png)
+  ![Power](https://anniecode.github.io/blog/assets/images/power1.png)
+  ![Copy Pull Secret](https://anniecode.github.io/blog/assets/images/PullSecret.png)
+- Red Hat 사이트에서 설치에 필요한 파일을 인프라 노드에서 다운로드
+  - RHCOS 이미지 파일
   ```
   $ wget https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/4.4/4.4.9/rhcos-4.4.9-ppc64le-metal.ppc64le.raw.gz
   ```
-  - OpenShift Installer 바이너리 <br>
+  - OpenShift Installer 바이너리 
   ```
   $ wget https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp/4.3.18/openshift-install-linux-4.3.18.tar.gz -C /usr/local/bin
   ```
