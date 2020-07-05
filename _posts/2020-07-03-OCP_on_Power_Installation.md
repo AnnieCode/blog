@@ -44,9 +44,9 @@ OpenShift Container Platform 클러스터를 설치/구축하기 전에 먼저 �
 **작업순서**
 1. 설계 작업 (VM, 네트워크)
 2. VM(LPAR) 생성
-3. 웹서버 설치/구성 (httpd)
-4. DNS서버 설치/구성 (bind)
-5. 로드 밸런서 설치/구성 (haproxy)
+3. DNS서버 설치/구성 (bind)
+4. 로드 밸런서 설치/구성 (haproxy)
+5. 웹서버 설치/구성 (httpd)
 6. NFS서버 설치/구성
 
 ---
@@ -139,6 +139,32 @@ OpenShift Container Platform 클러스터를 설치/구축하기 전에 먼저 �
 
 > **주의사항** Openshift Container platform 의 모든 노드는 플랫폼 컨테이너 이미지를 가져오고 Red Hat에 텔레메트리 데이터를 보내기 위해 인터넷 액세스가 가능해야 합니다.
 
+**DNS 서버**
+
+```
+$ yum install bind
+```
+
+`/etc/named.rfc1912.zones` 파일에 아래 내용 추가
+```
+zone "mycluster.example.com" IN {
+        type master;
+        file "mycluster.example.com.zone";
+        allow-update { none; };
+};
+
+zone "14.10.10.in-addr.arpa" IN {
+        type master;
+        file "mycluster.example.com.rr";
+        allow-update { none; };
+};
+```
+
+```
+$ systemctl enable bind
+$ systemctl start bind
+```
+
 **로드 밸런서**
 OpenShift 배포 전에 2대의 L4 밸런서가 필요합니다. 1대는 API용이고, 다른 1대는 Ingress Controller용인데, 테스트 목적으로는 1대로도 가능합니다.
 
@@ -146,3 +172,149 @@ OpenShift 배포 전에 2대의 L4 밸런서가 필요합니다. 1대는 API용�
 $ yum install haproxy
 $ vi /etc/haproxy/haproxy.cfg
 ```
+```
+#---------------------------------------------------------------------
+# Example configuration for a possible web application.  See the
+# full configuration options online.
+#
+#   http://haproxy.1wt.eu/download/1.4/doc/configuration.txt
+#
+#---------------------------------------------------------------------
+
+#---------------------------------------------------------------------
+# Global settings
+#---------------------------------------------------------------------
+global
+    # to have these messages end up in /var/log/haproxy.log you will
+    # need to:
+    #
+    # 1) configure syslog to accept network log events.  This is done
+    #    by adding the '-r' option to the SYSLOGD_OPTIONS in
+    #    /etc/sysconfig/syslog
+    #
+    # 2) configure local2 events to go to the /var/log/haproxy.log
+    #   file. A line like the following can be added to
+    #   /etc/sysconfig/syslog
+    #
+    #    local2.*                       /var/log/haproxy.log
+    #
+    log         127.0.0.1 local2        info
+
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+
+    # turn on stats unix socket
+    stats socket /var/lib/haproxy/stats
+
+#---------------------------------------------------------------------
+# common defaults that all the 'listen' and 'backend' sections will
+# use if not designated in their block
+#---------------------------------------------------------------------
+defaults
+    mode                  tcp
+    log                     global
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+##
+#  balancing for OCP Kubernetes API Server
+##
+frontend openshift-api-server
+    bind *:6443
+    mode tcp
+    option tcplog
+    default_backend openshift-api-server
+
+
+backend openshift-api-server
+    balance source
+    mode tcp
+    server bootstrap 10.10.14.126:6443 check
+    server master0 10.10.14.117:6443 check
+    server master1 10.10.14.118:6443 check
+    server master2 10.10.14.119:6443 check
+##
+# balancing for OCP Machine Config Server
+##
+frontend machine-config-server
+    bind *:22623
+    mode tcp
+    option tcplog
+    default_backend machine-config-server
+
+backend machine-config-server
+    balance source
+    mode tcp
+    server bootstrap 10.10.14.126:22623 check
+    server master0 10.10.14.117:22623 check
+    server master1 10.10.14.118:22623 check
+    server master2 10.10.14.119:22623 check
+
+##
+# balancing for OCP Ingress Insecure Port & Admin Page
+##
+frontend ingress-http
+    bind *:80
+    mode tcp
+    option tcplog
+    default_backend ingress-http
+
+backend ingress-http
+    balance source
+    mode tcp
+    server worker1 10.10.14.122:80 check
+    server worker2 10.10.14.123:80 check
+    server worker3 10.10.14.124:80 check
+
+##
+# balancing for OCP Ingress Secure Port
+##
+frontend ingress-https
+    bind *:443
+    mode tcp
+    option tcplog
+    default_backend ingress-https
+
+backend ingress-https
+    balance leastconn
+    mode tcp
+    server worker1 10.10.14.122:443 check
+    server worker2 10.10.14.123:443 check
+    server worker3 10.10.14.124:443 check
+```
+```
+$ systemctl enable haproxy
+$ systemctl start haproxy
+```
+
+**웹서버**
+각 노드가 부팅시 네트웍으로 Ignition File과 RHCOS 이미지를 다운받을 수 있도록 HTTP로 해당 파일을 서비스해줄 웹서버가 필요합니다.
+설치 및 시스템 부팅시 자동 시작되도록 구성합니다.
+```
+$ yum install -y httpd
+$ systemctl enable httpd
+```
+html root디렉토리는 /var/www/html입니다.
+이 디렉토리에 파일을 하나 만들고 제대로 접근되는지 테스트합니다.
+```
+$ cd /var/www/html
+$ echo "hello httpd" > README.md
+$ curl http://10.10.14.90/README.md
+```
+
+
