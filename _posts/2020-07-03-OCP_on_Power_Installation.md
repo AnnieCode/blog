@@ -452,7 +452,5 @@ $ cd /var/www/html/
 $ wget https://mirror.openshift.com/pub/openshift-v4/ppc64le/dependencies/rhcos/4.4/4.4.9/rhcos-4.4.9-ppc64le-metal.ppc64le.raw.gz
 ```
 
-[참조] Red Hat OpenShift Documentation 
-
-https://docs.openshift.com/container-platform/4.4/installing/installing_ibm_power/installing-ibm-power.html
+[Red Hat OpenShift Documentation](https://docs.openshift.com/container-platform/4.4/installing/installing_ibm_power/installing-ibm-power.html)
 
