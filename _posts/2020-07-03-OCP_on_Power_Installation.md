@@ -392,7 +392,7 @@ controlPlane:
   name: master
   replicas: 3
 metadata:
-  name: haru
+  name: mycluster
 networking:
   clusterNetwork:
   - cidr: 10.136.0.0/14
@@ -407,6 +407,7 @@ pullSecret: '{"auths": ...}'
 sshKey: 'ssh-rsa ... '
 ```
 `baseDomain: ` 클러스터 도메인 이름으로 변경
+`matadata: ` 클러스터 이름으로 변경
 `pullSecret: ` 다음 부분에 이전에 Red Hat 사이트에서 복사했던 Pull Secret 을 붙여넣기 
 `sshKey: ` 다음 부분에 이전에 생성했던 public SSH key 를 복사해서 붙여넣기
 
