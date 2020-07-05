@@ -73,11 +73,11 @@ OpenShift Container Platform 클러스터를 설치/구축하기 전에 먼저 �
 |Worker|RHCOS|2|8 GB|120 GB|2|
 
 
-**주의사항** : IBM Power 서버는 PowerVM 환경에서 기본 SMT8 모드를 지원하므로, 설정된 가상 코어수 (Virtual Processor)에 8배수를 한 개수가 vCPU로 인식됩니다. 예를 들어, VP 를 1로 설정했다면, RHCOS에서는 8개의 Logical CPU 가 보입니다. 마스터 노드의 경우, vCPU 개수가 많으면 커널 메모리를 많이 필요로 하므로 초기 구성시 마스터 노드의 VP개수를 1이나 2로 설정하는 것을 권장합니다.
+>**주의사항** : IBM Power 서버는 PowerVM 환경에서 기본 SMT8 모드를 지원하므로, 설정된 가상 코어수 (Virtual Processor)에 8배수를 한 개수가 vCPU로 인식됩니다. 예를 들어, VP 를 1로 설정했다면, RHCOS에서는 8개의 Logical CPU 가 보입니다. 마스터 노드의 경우, vCPU 개수가 많으면 커널 메모리를 많이 필요로 하므로 초기 구성시 마스터 노드의 VP개수를 1이나 2로 설정하는 것을 권장합니다.
 
 ##### 실제 테스트한 VM 환경
 
-![Cluster_Architecture](/assets/images/Cluster_Architecture1.png)
+![Cluster_Architecture](https://anniecode.github.io/blog/assets/images/Cluster_Architecture1.png)
 
 
 #### 클러스터 설계에 필요한 사전 정보 수집/설정
@@ -86,9 +86,9 @@ OpenShift Container Platform 클러스터를 설치/구축하기 전에 먼저 �
 - 도메인 네임 : `____________________________` (예:example.com)
 - OpenShift Pull Secrect을 복사해서 별도의 파일에 저장해 둡니다. <p>
   https://cloud.redhat.com/openshift/install/power/user-provisioned <p>
-  ![RedHat_Login](/assets/images/redhat_login1.png) <p>
-  ![Power](/assets/images/power1.png) <p>
-  ![Copy Pull Secret](/assets/images/PullSecret.png) <p>
+  ![RedHat_Login](https://anniecode.github.io/blog/assets/images/redhat_login1.png) <p>
+  ![Power](https://anniecode.github.io/blog/assets/images/power1.png) <p>
+  ![Copy Pull Secret](https://anniecode.github.io/blog/assets/images/PullSecret.png) <p>
 - Red Hat 사이트에서 설치에 필요한 파일을 인프라 노드에서 다운로드 <p>
   - RHCOS 이미지 파일 <br>
   ```
