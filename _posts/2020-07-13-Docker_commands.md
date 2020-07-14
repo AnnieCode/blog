@@ -21,7 +21,7 @@ docker --u [USERNAME] --p [PASSWORD]
 **Docker에 공유되어 있는 Repository에서 이미지를 가져오기**
 ```
 docker pull [IMAGE_NAME]
-docker pull debign
+docker pull debian
 # 별도의 태그가 없이 이미지 이름만 명시하면, 자동으로 :latest 태그의 이미지를 가져옵니다.
 ```
 ```
