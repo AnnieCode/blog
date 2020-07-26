@@ -40,20 +40,25 @@ docker pull [IMAGE_NAME] -a
 ```
 # docker tag [image_ID] [repository_name]/[image_name]:[version] 또는
 # docker tage [local_image_name] [repository_name]/[image_name]:[version]
-docker tag httpd fedora/httpd:1.0
-docker tag httpd:test fedora/httpd:1.0.test
+```
+```
+$ docker tag httpd fedora/httpd:1.0
+```
+```
+$ docker tag httpd:test fedora/httpd:1.0.test
 ```
 
 2. Private registry로 이미지를 업로드할 경우
 ```
 # docker tag [image_ID] [hostname]:[port_number]/[repository_name]/[image_name]:[version]
 
-docker tag 0e5574283393 myregistryhost:5000/fedora/httpd:1.0
+$ docker tag 0e5574283393 myregistryhost:5000/fedora/httpd:1.0
 ```
 
 3. 태그를 붙인 정보를 삭제하기
 태그로 붙인 이미지의 이름을 그대로 사용하여 rmi 명령어로 삭제합니다. 
 원본 이미지는 삭제되지 않고, 태그 정보만 삭제됩니다. 
+
 ```
-docker rmi [repository_name]:[version] 
+$ docker rmi [repository_name]:[version] 
 ```
