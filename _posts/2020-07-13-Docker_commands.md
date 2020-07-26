@@ -62,3 +62,9 @@ $ docker tag 0e5574283393 myregistryhost:5000/fedora/httpd:1.0
 ```
 $ docker rmi [repository_name]:[version] 
 ```
+
+[참고자료]
+
+https://docs.docker.com/engine/reference/commandline/rmi/
+https://docs.docker.com/engine/reference/commandline/tag/
+
