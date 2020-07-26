@@ -66,7 +66,7 @@ $ docker rmi [repository_name]:[version]
 
 **[참고자료]**
 
-[docker rmi 명령어] : https://docs.docker.com/engine/reference/commandline/rmi/
+[docker rmi 명령어]: https://docs.docker.com/engine/reference/commandline/rmi/
 
-[docker tag 명령어] : https://docs.docker.com/engine/reference/commandline/tag/
+[docker tag 명령어]: https://docs.docker.com/engine/reference/commandline/tag/
 
